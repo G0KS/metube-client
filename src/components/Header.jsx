@@ -1,4 +1,4 @@
-import { Upload, Airplay } from "feather-icons-react/build/IconComponents";
+import { Airplay } from "feather-icons-react/build/IconComponents";
 import React from "react";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
