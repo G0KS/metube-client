@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { PlusCircle } from "feather-icons-react";
 import { Button, Modal, FloatingLabel, Form } from "react-bootstrap";
+import { addVideo } from "../services/allRequests";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-function Add() {
+function Add({handleRes}) {
    const [uploadData, setUploadData] = useState({
       id: "",
       caption: "",
-      thumbail: "",
+      thumbnail: "",
       url: "",
    });
    const [show, setShow] = useState(false);
@@ -15,7 +18,33 @@ function Add() {
       const { name, value } = e.target;
       setUploadData({ ...uploadData, [name]: value });
    };
-   console.log(uploadData);
+
+   const youtubeURLGen = (e) => {
+      let youtubeUrl = e.target.value;
+      if (youtubeUrl.includes("v=")) {
+         let index = youtubeUrl.indexOf("v=");
+         let videoUrl = youtubeUrl.substring(index + 2, index + 13);
+         let check = `https://www.youtube.com/embed/${videoUrl}`;
+         setUploadData({ ...uploadData, url: check });
+      }
+   };
+   // console.log(uploadData);
+
+   const uploadVideo = async () => {
+      const { id, caption, thumbnail, url } = uploadData;
+      if (!id || !caption || !thumbnail || !url) {
+         toast.warning("Please fill the form");
+      } else {
+         const response = await addVideo(uploadData);
+         if (response.status >= 200 && response.status < 300) {
+            handleRes(response.data)
+            setShow(false);
+            toast.success("Video added successfully");
+         } else {
+            toast.warning("Please enter unique Id");
+         }
+      }
+   };
 
    const handleClose = () => setShow(false);
    const handleShow = () => setShow(true);
@@ -79,7 +108,7 @@ function Add() {
                      type="text"
                      placeholder="Youtube Video URL"
                      name="url"
-                     onChange={insertData}
+                     onChange={youtubeURLGen}
                   />
                </FloatingLabel>
             </Modal.Body>
@@ -87,9 +116,23 @@ function Add() {
                <Button variant="secondary" onClick={handleClose}>
                   Close
                </Button>
-               <Button variant="success">Upload Video</Button>
+               <Button variant="success" onClick={uploadVideo}>
+                  Upload Video
+               </Button>
             </Modal.Footer>
          </Modal>
+         <ToastContainer
+            position="bottom-center"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="colored"
+         />
       </>
    );
 }

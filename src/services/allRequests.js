@@ -18,6 +18,35 @@ export const deleteVideo = async (id)=>{
 
 // Add category 
 export const addCategory = async (body)=>{
-    return await commonRequest(`${base_URL}/cateogries`,"POST",body)
+    return await commonRequest(`${base_URL}/categories`,"POST",body)
 }
 
+// Get all categories
+export const getCategories = async ()=>{
+    return await commonRequest(`${base_URL}/categories`,"GET",{})
+} 
+
+// Delete category
+export const deleteCategory = async (id)=>{
+    return await commonRequest(`${base_URL}/categories/${id}`,"DELETE",{})
+}
+
+// Add history 
+export const addHistory = async (body)=>{
+    return await commonRequest(`${base_URL}/watchhistory`,"POST",body)
+}
+
+// Get all histories
+export const getHistories = async ()=>{
+    return await commonRequest(`${base_URL}/watchhistory`,"GET",{})
+} 
+
+// Get single video
+export const getAVideo = async (id)=>{
+    return await commonRequest(`${base_URL}/videos/${id}`,"GET",{})
+} 
+
+// Get updated category
+export const updatedCategory = async (id,body)=>{
+    return await commonRequest(`${base_URL}/categories/${id}`,"PUT",body)
+}
